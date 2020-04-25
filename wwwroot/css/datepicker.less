@@ -1,0 +1,80 @@
+﻿.datepicker {
+    position: relative;
+
+
+    &.datepicker-expanded .datepicker-dropdown {
+        display: block;
+    }
+
+    .datepicker-dropdown {
+        display: none;
+        position: absolute;
+        background: white;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 4px;
+        width: 100%;
+        box-shadow: 0 6px 12px rgba(0,0,0,.175);
+
+        table {
+            margin: 0;
+            user-select: none;
+
+            th {
+                cursor: pointer;
+                text-align: center;
+            }
+
+            td, th {
+                padding: 0;
+                text-align: center;
+                height: 30px;
+                width: 30px;
+                line-height: 30px;
+                border-radius: 4px;
+            }
+        }
+
+        .prev, .switch, .next {
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .day {
+            cursor: pointer;
+        }
+
+        span.month, span.year {
+            display: block;
+            float: left;
+            cursor: pointer;
+            width: 25%;
+            height: 54px;
+            line-height: 54px;
+            border-radius: 4px;
+        }
+
+        .day, .month, .year {
+            &.active {
+                color: #fff;
+                background: #204d74;
+                border-color: #122b40;
+            }
+
+            &.muted {
+                color: #6c757d;
+            }
+
+            &:hover {
+                background: #eee;
+                color: #212529;
+            }
+
+            &.disabled, &.disabled:hover {
+                background: 0;
+                color: #777;
+                cursor: not-allowed;
+            }
+        }
+    }
+}

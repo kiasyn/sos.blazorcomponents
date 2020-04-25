@@ -1,0 +1,99 @@
+﻿@inherits DatePickerBase
+@using System.Globalization
+
+<div class="datepicker @(Expanded ? "datepicker-expanded" : string.Empty)" style="width: 300px" @onblur="@(() => Expanded = false)" tabindex="0">
+    <input class="form-control" @onfocus="@(() => Expanded = true)" @bind="@InputValue" @bind:event="oninput" @onblur="@InputValueBlur" />
+
+    <div class="datepicker-dropdown">
+        <table class="table table-borderless table-sm">
+            @if (View == DatePickerView.Days)
+            {
+                var dtf = CultureInfo.CurrentCulture.DateTimeFormat;
+
+                <thead>
+                    <tr>
+                        <th class="prev" @onclick="@Previous">&laquo;</th>
+                        <th colspan="5" class="switch" @onclick="@(() => View = DatePickerView.Months)">@ViewDate.ToString("MMMM yyyy")</th>
+                        <th class="next" @onclick="@Next">&raquo;</th>
+                    </tr>
+                    <tr>
+                        @foreach (var dayOfWeek in WeekDays)
+                        {
+                            <th>@dtf.GetAbbreviatedDayName(dayOfWeek)</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var startOfWeek = DayViewStartDate; startOfWeek < DayViewEndDate; startOfWeek = startOfWeek.AddDays(7))
+                    {
+                        var endOfWeek = startOfWeek.AddDays(7);
+                        <tr>
+                            @for (var dt = startOfWeek; dt < endOfWeek; dt = dt.AddDays(1))
+                            {
+                                var muted = dt < StartOfMonth || dt > EndOfMonth ? "muted" : null;
+                                var active = Value == dt ? "active" : null;
+                                var disabled = IsDateDisabled(dt) ? "disabled" : null;
+
+                                var copyDate = new DateTime(dt.Ticks);
+                                <td class="day @muted @active @disabled" @onclick="@(() => SetDate(copyDate))">
+                                    @dt.Day
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            }
+            else if (View == DatePickerView.Months)
+            {
+                <thead>
+                    <tr>
+                        <th class="prev" @onclick="@Previous">&laquo;</th>
+                        <th colspan="2" class="switch" @onclick="@(() => View = DatePickerView.Decades)">@ViewDate.ToString("yyyy")</th>
+                        <th class="next" @onclick="@Next">&raquo;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="4">
+                            @for (var dt = MonthViewStartDate; dt < MonthViewEndDate; dt = dt.AddMonths(1))
+                            {
+                                int month = dt.Month;
+                                var active = (Value?.Month == dt.Month ? "active" : null);
+
+                                <span class="month @active" @onclick="@(() => SetView(DatePickerView.Days, month: month))">
+                                    @dt.ToString("MMM")
+                                </span>
+                            }
+                        </td>
+                    </tr>
+                </tbody>
+            }
+            else if (View == DatePickerView.Decades)
+            {
+                <thead>
+                    <tr>
+                        <th class="prev" @onclick="@Previous">&laquo;</th>
+                        <th colspan="2" class="switch">@StartOfDecade.ToString("yyyy") - @EndOfDecade.ToString("yyyy")</th>
+                        <th class="next" @onclick="@Next">&raquo;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="4">
+                            @for (var dt = DecadeViewStartDate; dt < DecadeViewEndDate; dt = dt.AddYears(1))
+                            {
+                                int year = dt.Year;
+                                var muted = (dt < StartOfDecade || dt > EndOfDecade ? "muted" : null);
+                                var active = (Value?.Year == dt.Year ? "active" : null);
+
+                                <span class="year @active" @onclick="@(() => SetView(DatePickerView.Months, year: year))">
+                                    @dt.ToString("yyyy")
+                                </span>
+                            }
+                        </td>
+                    </tr>
+                </tbody>
+            }
+        </table>
+    </div>
+</div>
