@@ -1,7 +1,7 @@
 ﻿@inherits DatePickerBase
 @using System.Globalization
 
-<div class="datepicker @(Expanded ? "datepicker-expanded" : string.Empty)" style="width: 300px" @onblur="@(() => Expanded = false)" tabindex="0">
+<div class="datepicker @(Expanded ? "datepicker-expanded" : string.Empty)" @onblur="@(() => Expanded = false)">
     <input class="form-control" @onfocus="@(() => Expanded = true)" @bind="@InputValue" @bind:event="oninput" @onblur="@InputValueBlur" />
 
     <div class="datepicker-dropdown">
