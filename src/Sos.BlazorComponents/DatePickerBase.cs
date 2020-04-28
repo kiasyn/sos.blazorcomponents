@@ -134,7 +134,7 @@ namespace Sos.BlazorComponents
                 return;
             }
 
-            this.Value = dt;
+            this.CurrentValue = dt;
             this.InputValue = dt.ToString(DateFormat);
             if (CloseOnSelect)
             {
@@ -152,13 +152,17 @@ namespace Sos.BlazorComponents
         {
             if (DateTime.TryParseExact(InputValue, DateFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out var dt))
             {
-                this.Value = dt;
+                this.CurrentValue = dt;
+                if (CloseOnSelect)
+                {
+                    this.Expanded = false;
+                }
             }
         }
 
         protected void InputValueBlur()
         {
-            this.InputValue = this.Value?.ToString(DateFormat);
+            this.InputValue = this.CurrentValue?.ToString(DateFormat);
         }
     }
 }
